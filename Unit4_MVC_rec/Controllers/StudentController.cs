@@ -41,11 +41,6 @@ namespace Unit4_MVC_rec.Controllers
                 ModelState.AddModelError(nameof(student.Id), "A student with this ID already exists.");
             }
 
-            if (!ModelState.IsValid)
-            {
-                return View(student);
-            }
-
             studentRepo.AddStudent(student);
             return RedirectToAction(nameof(Index));
         }

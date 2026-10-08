@@ -40,15 +40,17 @@ namespace Unit4_MVC_rec.Models
         public StudentModel? getStudentById(int id)
         {
             // return myStudents.Find(student => student.Id == id);
-            // Console.WriteLine("Getting student with id = " + id);
+            //Console.WriteLine("Getting student with id = " + id);
             foreach (StudentModel student in myStudents)
             {
                 if (student.Id == id)
                 {
+                    //Console.WriteLine("Student Found ");
                     return (student);
                 }
             }
             // if you can't find the correct student return the first one
+            //Console.WriteLine("Student NOT Found ");
             return (nullStudent());
 
         }
