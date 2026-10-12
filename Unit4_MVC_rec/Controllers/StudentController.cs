@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Unit4_MVC_rec.Models;
 
@@ -6,7 +7,7 @@ namespace Unit4_MVC_rec.Controllers
     public class StudentController : Controller
     {
 
-        StudentRepository studentRepo = new StudentRepository();
+        IStudentCRUDInterface studentRepo = new StudentRepository();
         public StudentController()
         {
 
@@ -19,8 +20,8 @@ namespace Unit4_MVC_rec.Controllers
 
         public IActionResult Details(int id)
         {
-            StudentModel? student = studentRepo.getStudentById(id);
-            if (student == null)
+            IStudentInterface? student = studentRepo.getStudentById(id);
+            if (student == null || student.Id == -1)
             {
                 return NotFound();
             }
@@ -36,7 +37,8 @@ namespace Unit4_MVC_rec.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Add(StudentModel student)
         {
-            if (studentRepo.getStudentById(student.Id) != null)
+            if (studentRepo.getStudentById(student.Id) is IStudentInterface existingStudent
+                && existingStudent.Id != -1)
             {
                 ModelState.AddModelError(nameof(student.Id), "A student with this ID already exists.");
             }
@@ -47,8 +49,8 @@ namespace Unit4_MVC_rec.Controllers
 
         public IActionResult Edit(int id)
         {
-            StudentModel? student = studentRepo.getStudentById(id);
-            if (student == null)
+            IStudentInterface? student = studentRepo.getStudentById(id);
+            if (student == null || student.Id == -1)
             {
                 return NotFound();
             }
@@ -65,7 +67,8 @@ namespace Unit4_MVC_rec.Controllers
                 return BadRequest();
             }
 
-            if (studentRepo.getStudentById(id) == null)
+            IStudentInterface? existingStudent = studentRepo.getStudentById(id);
+            if (existingStudent == null || existingStudent.Id == -1)
             {
                 return NotFound();
             }
@@ -81,8 +84,8 @@ namespace Unit4_MVC_rec.Controllers
 
         public IActionResult Delete(int id)
         {
-            StudentModel? student = studentRepo.getStudentById(id);
-            if (student == null)
+            IStudentInterface? student = studentRepo.getStudentById(id);
+            if (student == null || student.Id == -1)
             {
                 return NotFound();
             }
@@ -94,7 +97,8 @@ namespace Unit4_MVC_rec.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            if (studentRepo.getStudentById(id) == null)
+            IStudentInterface? student = studentRepo.getStudentById(id);
+            if (student == null || student.Id == -1)
             {
                 return NotFound();
             }
