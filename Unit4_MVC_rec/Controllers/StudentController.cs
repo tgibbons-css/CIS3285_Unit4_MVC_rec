@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Unit4_MVC_rec.Models;
 
@@ -5,8 +6,8 @@ namespace Unit4_MVC_rec.Controllers
 {
     public class StudentController : Controller
     {
+        IStudentCRUDInterface studentRepo = new StudentRepository();
 
-        StudentRepository studentRepo = new StudentRepository();
         public StudentController()
         {
 
@@ -19,11 +20,13 @@ namespace Unit4_MVC_rec.Controllers
 
         public IActionResult Details(int id)
         {
-            StudentModel? student = studentRepo.getStudentById(id);
+            IStudentInterface? student = studentRepo.getStudentById(id);
+
             if (student == null)
             {
                 return NotFound();
             }
+
             return View("Details", student);
         }
 
@@ -38,7 +41,15 @@ namespace Unit4_MVC_rec.Controllers
         {
             if (studentRepo.getStudentById(student.Id) != null)
             {
-                ModelState.AddModelError(nameof(student.Id), "A student with this ID already exists.");
+                ModelState.AddModelError(
+                    nameof(student.Id),
+                    "A student with this ID already exists."
+                );
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(student);
             }
 
             studentRepo.AddStudent(student);
@@ -47,7 +58,8 @@ namespace Unit4_MVC_rec.Controllers
 
         public IActionResult Edit(int id)
         {
-            StudentModel? student = studentRepo.getStudentById(id);
+            IStudentInterface? student = studentRepo.getStudentById(id);
+
             if (student == null)
             {
                 return NotFound();
@@ -81,7 +93,8 @@ namespace Unit4_MVC_rec.Controllers
 
         public IActionResult Delete(int id)
         {
-            StudentModel? student = studentRepo.getStudentById(id);
+            IStudentInterface? student = studentRepo.getStudentById(id);
+
             if (student == null)
             {
                 return NotFound();
