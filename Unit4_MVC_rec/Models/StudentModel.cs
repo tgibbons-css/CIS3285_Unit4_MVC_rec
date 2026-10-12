@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Unit4_MVC_rec.Models
 {
 
-    public class StudentModel
+    public class StudentModel : IStudentInterface
     {
         [Key]
         public int Id { get; set; }
