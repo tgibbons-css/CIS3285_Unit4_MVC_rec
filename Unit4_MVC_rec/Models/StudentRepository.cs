@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 
@@ -5,90 +6,76 @@ namespace Unit4_MVC_rec.Models
 {
     public interface IStudentCRUDInterface
     {
-        List<StudentModel> getAllStudents();
-        StudentModel? getStudentById(int id);
-        StudentModel getOneStudent(int index);
-        void AddStudent(StudentModel newStudent);
+        List<IStudentInterface> getAllStudents();
+        IStudentInterface? getStudentById(int id);
+        IStudentInterface getOneStudent(int index);
+        void AddStudent(IStudentInterface newStudent);
         void DeleteStudent(int studentId);
-        void UpdateStudent(int studentId, StudentModel updatedStudent);
+        void UpdateStudent(int studentId, IStudentInterface updatedStudent);
     }
 
     public class StudentRepository : IStudentCRUDInterface
     {
-
-        //DEBT -- this should be accessing a database
-        static List<StudentModel> myStudents = new List<StudentModel>();
+        // DEBT -- this should be accessing a database
+        static List<IStudentInterface> myStudents = new List<IStudentInterface>();
 
         public StudentRepository()
         {
             if (myStudents.Count == 0)
             {
-                // if list is empty, initialize it
+                // If list is empty, initialize it
                 myStudents.Add(new StudentModel(1001, "Tom", 16));
                 myStudents.Add(new StudentModel(1002, "Jen", 8));
                 myStudents.Add(new StudentModel(1003, "Sabah", 16));
             }
-
         }
 
-        public List<StudentModel> getAllStudents()
+        public List<IStudentInterface> getAllStudents()
         {
             return myStudents;
         }
 
-
-        public StudentModel? getStudentById(int id)
+        public IStudentInterface? getStudentById(int id)
         {
-            // return myStudents.Find(student => student.Id == id);
-            //Console.WriteLine("Getting student with id = " + id);
-            foreach (StudentModel student in myStudents)
+            // Search for a student using their ID
+            foreach (IStudentInterface student in myStudents)
             {
                 if (student.Id == id)
                 {
-                    //Console.WriteLine("Student Found ");
-                    return (student);
+                    return student;
                 }
             }
-            // if you can't find the correct student return the first one
-            //Console.WriteLine("Student NOT Found ");
-            return (nullStudent());
 
+            // Return a NullStudent if no matching ID is found
+            return new NullStudent();
         }
 
-        private StudentModel nullStudent()
+        public IStudentInterface getOneStudent(int index)
         {
-            // create a null student
-            StudentModel nullStudent = new StudentModel(-1, "Null Student", -999);
-            return nullStudent;
+            return myStudents[index];
         }
 
-
-
-        public StudentModel getOneStudent(int index)
-        {
-            return (myStudents[index]);
-        }
-        public void AddStudent(StudentModel newStudent)
+        public void AddStudent(IStudentInterface newStudent)
         {
             myStudents.Add(newStudent);
         }
 
         public void DeleteStudent(int studentId)
         {
-            // search the list for the student that matches the student ID
-            // DEBT --- Handle case when student id not found and index is -1
-            int index = myStudents.FindIndex(student => (student.Id == studentId));
+            // Find the student matching the given ID
+            int index = myStudents.FindIndex(student => student.Id == studentId);
+
             if (index >= 0)
             {
                 myStudents.RemoveAt(index);
             }
         }
 
-        public void UpdateStudent(int studentId, StudentModel updatedStudent)
+        public void UpdateStudent(int studentId, IStudentInterface updatedStudent)
         {
-            // search the list for the student that matches the student ID
-            // DEBT --- Handle case when student id not found and index is -1
-            int index = myStudents.FindIndex(student => (student.Id == studentId));
+            // Find the student matching the given ID
+            int index = myStudents.FindIndex(student => student.Id == studentId);
+
             if (index >= 0)
             {
                 myStudents[index] = updatedStudent;
@@ -96,5 +83,3 @@ namespace Unit4_MVC_rec.Models
         }
     }
 }
-
-
