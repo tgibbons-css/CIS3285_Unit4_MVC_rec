@@ -19,7 +19,7 @@ namespace Unit4_MVC_rec.Controllers
 
         public IActionResult Details(int id)
         {
-            StudentModel? student = studentRepo.getStudentById(id);
+            IStudentInterface? student = studentRepo.getStudentById(id);
             if (student == null)
             {
                 return NotFound();
@@ -34,7 +34,7 @@ namespace Unit4_MVC_rec.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Add(StudentModel student)
+        public IActionResult Add(IStudentInterface student)
         {
             if (studentRepo.getStudentById(student.Id) != null)
             {
@@ -47,7 +47,7 @@ namespace Unit4_MVC_rec.Controllers
 
         public IActionResult Edit(int id)
         {
-            StudentModel? student = studentRepo.getStudentById(id);
+            IStudentInterface? student = studentRepo.getStudentById(id);
             if (student == null)
             {
                 return NotFound();
@@ -58,7 +58,7 @@ namespace Unit4_MVC_rec.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, StudentModel student)
+        public IActionResult Edit(int id, IStudentInterface student)
         {
             if (id != student.Id)
             {
@@ -81,7 +81,7 @@ namespace Unit4_MVC_rec.Controllers
 
         public IActionResult Delete(int id)
         {
-            StudentModel? student = studentRepo.getStudentById(id);
+            IStudentInterface? student = studentRepo.getStudentById(id);
             if (student == null)
             {
                 return NotFound();
